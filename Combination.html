@@ -1,0 +1,225 @@
+<html>
+<head>
+	<title>Combinations</title>
+</head>
+<body>
+<div>ABC</div>
+<script type="text/javascript" src="GenerateCombination.js"></script>
+<script type="text/javascript" src="JSONValues.js"></script>
+<script type="text/javascript">
+
+var TxT = {};
+var individualBoxes = [];
+var secondBox = [];
+var thirdBox = [];
+function CreateTxT(a,b,c,d){
+	return {
+		p1 : a,
+		p2 : b,
+		p3 : c,
+		p4 : d,
+		display : function(){
+			console.log(this.p1 + " " +  this.p2 + "\n" + this.p3 + " " + this.p4);
+		}
+	}; 
+}
+
+function FxF(a,b,c,d){
+	this.b1 = a;//box1;
+	this.b2 = b;//box2;
+	this.b3 = c;//box3;
+	this.b4 = d;//box4;
+};
+
+FxF.prototype.displayMatrix = function(){
+	try{
+		console.log(this.b1.p1 + " " + this.b1.p2 + " " + this.b2.p1 + " " + this.b2.p2);
+		console.log(this.b1.p3 + " " + this.b1.p4 + " " + this.b2.p3 + " " + this.b2.p4);
+		console.log(this.b3.p1 + " " + this.b3.p2 + " " + this.b4.p1 + " " + this.b4.p2);
+		console.log(this.b3.p3 + " " + this.b3.p4 + " " + this.b4.p3 + " " + this.b4.p4);
+	}catch(e){
+		console.log(e.message);
+	}
+}
+
+//FxF.displayMatrix();
+
+
+function readAllValues(){
+	var _individualBoxes = [];
+	for(a in allValueObject){
+		for(b in allValueObject[a]){
+			for(c in allValueObject[a][b]){
+				var box = new CreateTxT(a,b,c,allValueObject[a][b][c]);
+				_individualBoxes.push(box);
+				//console.log(a + "" + b + "" + c + "" + allValueObject[a][b][c]);
+			}
+		}
+	}
+	return _individualBoxes;
+}
+
+individualBoxes = readAllValues();
+
+//Let my first box is 1,2,3,4
+//var p1 = 1, p2 = 2, p3 = 3, p4 = 4
+function setSecondBox(fbyf){
+	var _secondBox = [];
+	for(a in allValueObject){
+		if(a!=fbyf.b1.p1 && a!=fbyf.b1.p2){
+			//console.log(a);
+			for(b in allValueObject[a]){
+				if(b!=fbyf.b1.p1 && b!=fbyf.b1.p2){
+					for(c in allValueObject[a][b]){
+						var box = new CreateTxT(a,b,c,allValueObject[a][b][c]);
+						//console.log(a + "" + b + "" + c + "" + allValueObject[a][b][c]);
+						_secondBox.push(box);
+					}	
+				}
+			}
+		}
+	}
+	return _secondBox;
+}
+
+function setThirdBox(fbyf){
+	var _thirdBox = [];
+	for(a in allValueObject){
+		if(a!=fbyf.b1.p1 && a!=fbyf.b1.p3){
+			for(b in allValueObject[a]){
+				if(b!=fbyf.b1.p2 && b!=fbyf.b1.p4){
+					for(c in allValueObject[a][b]){
+						if(c!=fbyf.b1.p1 && c!=fbyf.b1.p3){
+							var box = new CreateTxT(a,b,c,allValueObject[a][b][c]);
+						//console.log(a + "" + b + "" + c + "" + allValueObject[a][b][c]);
+							_thirdBox.push(box);
+						}
+					}	
+				}
+			}
+		}
+	}
+	return _thirdBox;
+}
+
+//var box4 = CreateTxT();
+function setFourthBox(fbyf){
+	var fourthBox; 
+	for(a in allValueObject){
+		if(a!=fbyf.b2.p1 && a!=fbyf.b2.p3 && a!=fbyf.b3.p1 && a!=fbyf.b3.p2){ //correct
+			//alert("a : " +a);
+
+			for(b in allValueObject[a]){
+				if(b!=fbyf.b3.p1 && b!=fbyf.b3.p2 && b!=fbyf.b2.p2 && b!=fbyf.b2.p4){
+					//alert("b  : " + b);
+					for(c in allValueObject[a][b]){
+						if(c!=fbyf.b3.p3 && c!=fbyf.b3.p4 && c!=fbyf.b2.p1 && c!=fbyf.b2.p3){
+							//console.log(a + "" + b + "" + c + "" + allValueObject[a][b][c]);
+							fourthBox = new CreateTxT(a,b,c,allValueObject[a][b][c]);
+							/*console.log("--------Fouth Box----------");
+							fourthBox.display();
+							console.log("--------Fouth Box----------");*/
+						}
+					}	
+				}
+			}
+		}
+	}
+	return fourthBox;
+}
+
+function show4x4All(){
+	var box1 = null;//CreateTxT(1,2,3,4);
+	var box2 = null;//CreateTxT(3,4,1,2);
+	var box3 = null;//CreateTxT(2,3,4,1);
+	var box4 = null;//CreateTxT(4,1,2,3);
+	var count = 1;
+	//var fbyfObj = new FxF(box1,box2,box3,box4);
+
+	for(var i = 0, ilen = individualBoxes.length; i<ilen; i++){
+		//individualBoxes[a].display();
+		var fbyfObj = new FxF(box1,box2,box3,box4);
+		fbyfObj.b1 = individualBoxes[i];
+		secondBox = [];
+		thirdBox = [];
+		secondBox = setSecondBox(fbyfObj);
+		thirdBox = setThirdBox(fbyfObj);
+		for(var j = 0, jlen = secondBox.length; j<jlen; j++){
+			//secondBox[b].display();
+			fbyfObj.b2 = secondBox[j];
+			//console.log("-------second Box--------");
+			
+			for(var k = 0, klen = thirdBox.length; k<klen; k++){
+				//thirdBox[c].display();
+				//console.log("-------third Box--------");
+				
+				
+				fbyfObj.b3 = thirdBox[k];
+
+				//fbyfObj.b3.display();
+				var _fourthBox = setFourthBox(fbyfObj);
+				//console.log(typeof _fourthBox);
+				if(typeof _fourthBox != 'undefined'){
+					fbyfObj.b4 = _fourthBox;
+
+					console.log("--------" + count + "---------" );
+					
+					fbyfObj.displayMatrix();
+					count++;
+				}
+				
+			}
+		}
+		
+	}	
+}
+
+//Calling Final Method
+show4x4All();
+
+/*function combiGenerator(appendElement, appendingToElements){
+	var _appendElement;
+	var _appendingToElements = [];
+	if(appendElement.length > 1){
+		_appendElement = appendElement.slice(0,1);
+		//_appendingToElements.push(appendElement.slice(1));
+
+		//console.log(_appendElement);
+		//console.log(_appendingToElements);
+		
+		_appendingToElements  = combiGenerator(appendElement.slice(1));
+		//return combiGenerator
+		//return combiGenerator()
+	}else{
+		_appendElement = appendElement;
+		_appendingToElements.push(appendElement);
+		return _appendingToElements;
+	}
+
+	var resultArray = [];
+	var singleAppendingToElement;
+	for(var i = 0; i<_appendingToElements.length; i++){
+		singleAppendingToElement = _appendingToElements[i];
+		for(var j = 0; j<singleAppendingToElement.length + 1; j++){
+			var copyOfAppendingToElement = singleAppendingToElement.slice(0);
+			copyOfAppendingToElement.splice(j,0,_appendElement[0]);
+			resultArray.push(copyOfAppendingToElement);
+		}
+	}
+	return resultArray;
+
+}
+
+function combi(){
+	var a = combiGenerator([1,2,3,4]);//combiGenerator([1],[[2]]);//combiGenerator([1],[[2,3],[3,2]]);
+
+	for(var i in a){
+		console.log(a[i]);
+	}
+	console.log(a.length);
+}
+*/
+//combi();
+</script>
+</body>
+</html>
